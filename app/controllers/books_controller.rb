@@ -16,12 +16,13 @@ class BooksController < ApplicationController
     end
 
     def show
-        # http://127.0.0.1:3000/api/v1/books/2
-        # @book = Book.find_by(id: params[:id])
-        @book = Book.find(params[:id])
-        # json_response(@book)
-        render json: @book, serializer: BookNoAuthSerializer
-       
+        if !authorize
+            # http://127.0.0.1:3000/api/v1/books/2
+            # @book = Book.find_by(id: params[:id])
+            @book = Book.find(params[:id])
+            # json_response(@book)
+            render json: @book, serializer: BookNoAuthSerializer
+        end
     end
 
     def create

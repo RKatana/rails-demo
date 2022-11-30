@@ -14,11 +14,9 @@ class Author < ApplicationRecord
     def self.authenticate(email, password)
         @author = Author.find_by("email = ?", email)
         if @author && @author.password_hash == BCrypt::Engine.hash_secret(password, @author.password_salt)
-            # sessions[author_id] = @author.id
-            json_response(@author)
+            @author
         else
-            json_response({message: "Wrong Email or Password. Try again!"})
+            nil
         end
     end
-
 end
