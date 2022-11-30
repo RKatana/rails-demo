@@ -14,8 +14,13 @@ class Seed
 
     def generate_books
         5.times do |i|
+            @author = Author.create!(
+                name:Faker::Name.name,
+                email:Faker::Internet.email,
+                password: Faker::Internet.password
+            )
             book = Book.create!(
-                author:Faker::Name.name,
+                author: @author,
                 title:Faker::Movie.title,
                 synposis:Faker::Lorem.paragraph(sentence_count: 4)
             )

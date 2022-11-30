@@ -6,18 +6,22 @@ class BooksController < ApplicationController
         @author = params[:author]
         if @author
             @book = Book.search_by_author(@author)
-            json_response(@book)
+            render json: @book
         else
             @books = Book.all
-            json_response(@books)
+            render json: @books
         end
+        # @books = Book.all
+        # render json: @books
     end
 
     def show
         # http://127.0.0.1:3000/api/v1/books/2
         # @book = Book.find_by(id: params[:id])
         @book = Book.find(params[:id])
-        json_response(@book)
+        # json_response(@book)
+        render json: @book, serializer: BookNoAuthSerializer
+       
     end
 
     def create
