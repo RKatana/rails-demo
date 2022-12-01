@@ -1,18 +1,20 @@
 class ApplicationController < ActionController::API
-    
+    # before_action :authenticate, except: :generate_token
     include ActionController::Helpers
     include Response
     helper_method :current_user 
 
-    def current_user #We use this action to monitor who is logged in based on the session
-        if session[:author_id]
-            @current_user = Author.find(session[:author_id])
-        end
-    end
+    def authenticate
+        header = request.headers['Authorization']
+        header = header.split(' ').last if header
 
-    def authorize
-        if !current_user
-          json_response({message:'You are not authorized to perform this action. You have to log in'}, status = 401)
+        begin
+            decoded = JwtToken.decode(header)
+            @current_user = Author.find(decoded[:author_id])
+        rescue ActiveRecord::RecordNotFound => e
+            render json: {error: e.message, message: "An error occured. Try again."}, status: 401
+        rescue JWT::DecodeError => e
+            render json: {error: e.message, message: "Error: Login again to generate a new token"}, status: 401
         end
     end
 end

@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   post "signin" => "sessions#create_session"
   get "signout" => "sessions#destroy"
 
+  post "/login" => "token#generate_token"
+
 end

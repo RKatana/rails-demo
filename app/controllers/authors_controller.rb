@@ -1,4 +1,5 @@
 class AuthorsController < ApplicationController
+    before_action :authenticate, except: [:index, :show, :create]
     def index 
         @authors = Author.all
         json_response(@authors)

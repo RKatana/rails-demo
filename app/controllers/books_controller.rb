@@ -1,6 +1,7 @@
 class BooksController < ApplicationController
     # CRUD Function in this file 
     # index, create, show, update, destroy
+    before_action :authenticate, except: [:index, :show]
     def index
         # http://127.0.0.1:3000/api/v1/books/?author=Katana
         @author = params[:author]
@@ -16,13 +17,11 @@ class BooksController < ApplicationController
     end
 
     def show
-        if !authorize
-            # http://127.0.0.1:3000/api/v1/books/2
-            # @book = Book.find_by(id: params[:id])
-            @book = Book.find(params[:id])
-            # json_response(@book)
-            render json: @book, serializer: BookNoAuthSerializer
-        end
+        # http://127.0.0.1:3000/api/v1/books/2
+        # @book = Book.find_by(id: params[:id])
+        @book = Book.find(params[:id])
+        # json_response(@book)
+        render json: @book, serializer: BookNoAuthSerializer
     end
 
     def create
